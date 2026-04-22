@@ -1,0 +1,57 @@
+services:
+  - type: web
+    name: meena-ivf
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_NAME
+        value: "Meena IVF"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        value: base64:+tY7+CZ36UJIFeso+wwGlSkQRYHk3lUnqcGbpNaRMwI=
+      - key: APP_URL
+        fromService:
+          type: web
+          name: meena-ivf
+          property: host
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        fromDatabase:
+          name: meena-ivf-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: meena-ivf-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: meena-ivf-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: meena-ivf-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: meena-ivf-db
+          property: password
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: FILESYSTEM_DISK
+        value: local
+
+databases:
+  - name: meena-ivf-db
+    databaseName: meena_ivf
+    user: meenaivf
+    plan: free
