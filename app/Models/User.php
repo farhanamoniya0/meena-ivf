@@ -20,6 +20,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'avatar',
+        'is_active',
     ];
 
     /**
@@ -42,6 +46,20 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
+
+    public function hasRole(string|array $role): bool
+    {
+        if (is_array($role)) {
+            return in_array($this->role, $role);
+        }
+        return $this->role === $role;
+    }
+
+    public function isAdmin(): bool { return $this->role === 'admin'; }
+
+    public function tasks() { return $this->hasMany(Task::class, 'assigned_to'); }
+    public function assignedTasks() { return $this->hasMany(Task::class, 'assigned_by'); }
 }
